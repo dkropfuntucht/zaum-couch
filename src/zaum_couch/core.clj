@@ -7,9 +7,6 @@
 
 (defrecord ZaumCouch [connection]
   z/IZaumDatabase
-  (z/prepare-connection [_ connection]
-    (construct-connection connection))
-
   (z/perform-create
     [_ {:keys [connection level entity] :as command}]
     (let [{:keys [password port user uri scheme]} connection
