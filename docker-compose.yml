@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  test-storage:
+    image: couchdb
+    environment:
+      - COUCHDB_USER=admin
+      - COUCHDB_PASSWORD=alphaghetti
+    ports:
+      - "127.0.0.1:5984:5984"
+    container_name: test-storage
