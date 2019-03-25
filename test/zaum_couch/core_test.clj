@@ -8,20 +8,13 @@
     (let [result (z/perform-op
                   :create
                   {:operation   :create
-                   :connection  {:dbtype   "couch"
-                                 :dbname   "couchdb"
-                                 :user     "admin"
-                                 :password "alphaghetti"
-                                 :uri      "127.0.0.1"
-                                 :scheme   "http"
-                                 :port     5984
-                                 :impl (new-couch {:dbtype   "couch"
-                                                   :dbname   "couchdb"
-                                                   :user     "admin"
-                                                   :password "alphaghetti"
-                                                   :uri      "127.0.0.1"
-                                                   :scheme   "http"
-                                                   :port     5984})}
+                   :connection  (z/init-connection {:dbtype   :couch
+                                                    :dbname   "couchdb"
+                                                    :user     "admin"
+                                                    :password "alphaghetti"
+                                                    :uri      "127.0.0.1"
+                                                    :scheme   "http"
+                                                    :port     5984})
                    :level       :db
                    :entity      "test"})]
       (is (= (:status result) :ok))))
@@ -30,20 +23,13 @@
     (let [result (z/perform-op
                   :create
                   {:operation   :create
-                   :connection  {:dbtype   "couch"
-                                 :dbname   "couchdb"
-                                 :user     "admin"
-                                 :password "alphaghetti"
-                                 :uri      "127.0.0.1"
-                                 :scheme   "http"
-                                 :port     5984
-                                 :impl (new-couch {:dbtype   "couch"
-                                                   :dbname   "couchdb"
-                                                   :user     "admin"
-                                                   :password "alphaghetti"
-                                                   :uri      "127.0.0.1"
-                                                   :scheme   "http"
-                                                   :port     5984})}
+                   :connection  (z/init-connection {:dbtype   :couch
+                                                    :dbname   "couchdb"
+                                                    :user     "admin"
+                                                    :password "alphaghetti"
+                                                    :uri      "127.0.0.1"
+                                                    :scheme   "http"
+                                                    :port     5984})
                    :level       :db
                    :entity      "test"})]
       (is (= (:status result) :warning))))
@@ -52,20 +38,13 @@
     (let [result (z/perform-op
                   :delete
                   {:operation   :delete
-                   :connection  {:dbtype   "couch"
-                                 :dbname   "couchdb"
-                                 :user     "admin"
-                                 :password "alphaghetti"
-                                 :uri      "127.0.0.1"
-                                 :scheme   "http"
-                                 :port     5984
-                                 :impl (new-couch {:dbtype   "couch"
-                                                   :dbname   "couchdb"
-                                                   :user     "admin"
-                                                   :password "alphaghetti"
-                                                   :uri      "127.0.0.1"
-                                                   :scheme   "http"
-                                                   :port     5984})}
+                   :connection  (z/init-connection {:dbtype   :couch
+                                                    :dbname   "couchdb"
+                                                    :user     "admin"
+                                                    :password "alphaghetti"
+                                                    :uri      "127.0.0.1"
+                                                    :scheme   "http"
+                                                    :port     5984})
                    :level       :db
                    :entity      "test"})]
       (is (= (:status result) :ok))))
@@ -74,20 +53,13 @@
     (let [result (z/perform-op
                   :delete
                   {:operation   :delete
-                   :connection  {:dbtype   "couch"
-                                 :dbname   "couchdb"
-                                 :user     "admin"
-                                 :password "alphaghetti"
-                                 :uri      "127.0.0.1"
-                                 :scheme   "http"
-                                 :port     5984
-                                 :impl (new-couch {:dbtype   "couch"
+                   :connection (z/init-connection {:dbtype   :couch
                                                    :dbname   "couchdb"
                                                    :user     "admin"
                                                    :password "alphaghetti"
                                                    :uri      "127.0.0.1"
                                                    :scheme   "http"
-                                                   :port     5984})}
+                                                   :port     5984})
                    :level       :db
                    :entity      "test"})]
       (is (= (:status result) :warning)))))
@@ -98,40 +70,26 @@
           (z/perform-op
            :create
            {:operation   :create
-            :connection  {:dbtype   "couch"
-                          :dbname   "couchdb"
-                          :user     "admin"
-                          :password "alphaghetti"
-                          :uri      "127.0.0.1"
-                          :scheme   "http"
-                          :port     5984
-                          :impl (new-couch {:dbtype   "couch"
-                                            :dbname   "couchdb"
-                                            :user     "admin"
-                                            :password "alphaghetti"
-                                            :uri      "127.0.0.1"
-                                            :scheme   "http"
-                                            :port     5984})}
+            :connection  (z/init-connection {:dbtype   :couch
+                                             :dbname   "couchdb"
+                                             :user     "admin"
+                                             :password "alphaghetti"
+                                             :uri      "127.0.0.1"
+                                             :scheme   "http"
+                                             :port     5984})
             :level       :db
             :entity      "test"})
           store-result
           (z/perform-op
            :update
            {:operation   :update
-            :connection  {:dbtype   "couch"
-                          :dbname   "couchdb"
-                          :user     "admin"
-                          :password "alphaghetti"
-                          :uri      "127.0.0.1"
-                          :scheme   "http"
-                          :port     5984
-                          :impl (new-couch {:dbtype   "couch"
-                                            :dbname   "couchdb"
-                                            :user     "admin"
-                                            :password "alphaghetti"
-                                            :uri      "127.0.0.1"
-                                            :scheme   "http"
-                                            :port     5984})}
+            :connection  (z/init-connection {:dbtype   :couch
+                                             :dbname   "couchdb"
+                                             :user     "admin"
+                                             :password "alphaghetti"
+                                             :uri      "127.0.0.1"
+                                             :scheme   "http"
+                                             :port     5984})
             :level       :record
             :entity      "test"
             :record      {:foo "bar"}})
@@ -139,20 +97,13 @@
           (z/perform-op
            :read
            {:operation   :read
-            :connection  {:dbtype   "couch"
-                          :dbname   "couchdb"
-                          :user     "admin"
-                          :password "alphaghetti"
-                          :uri      "127.0.0.1"
-                          :scheme   "http"
-                          :port     5984
-                          :impl (new-couch {:dbtype   "couch"
-                                            :dbname   "couchdb"
-                                            :user     "admin"
-                                            :password "alphaghetti"
-                                            :uri      "127.0.0.1"
-                                            :scheme   "http"
-                                            :port     5984})}
+            :connection  (z/init-connection {:dbtype   :couch
+                                             :dbname   "couchdb"
+                                             :user     "admin"
+                                             :password "alphaghetti"
+                                             :uri      "127.0.0.1"
+                                             :scheme   "http"
+                                             :port     5984})
             :level       :record
             :entity      "test"})]
       (println "//////////////////////////////////////////////")

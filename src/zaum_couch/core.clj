@@ -3,8 +3,6 @@
             [clojure.data.json :as json]
             [zaum.core :as z]))
 
-(declare construct-connection)
-
 (defrecord ZaumCouch [connection]
   z/IZaumDatabase
   (z/perform-create
@@ -34,34 +32,53 @@
   (z/perform-read
     [_ {:keys [entity identifier]}]
     (let [{:keys [password port user uri scheme]} connection
-          path-cont  (if (some? identifier) (str "/" identifier) "/_all_docs")
-          result     (http/get (str scheme "://" uri ":" port "/" entity path-cont)
-                               {:basic-auth       [user password]
-                                :throw-exceptions false})
+          path-cont   (if (some? identifier)
+                        (str "/" identifier)
+                        "/_all_docs")
+          result      (http/get (str scheme "://" uri ":" port "/" entity path-cont)
+                                {:basic-auth       [user password]
+                                 :throw-exceptions false})
           status      (:status result)
           body        (json/read-str (:body result)
                                      :key-fn keyword)
+          more        (if (and (contains? #{200} status)
+                               (= "/_all_docs" path-cont))
+                        (mapv
+                         (fn [i]
+                           (->
+                            (http/get
+                             (str scheme "://" uri ":" port "/" entity "/" (:id i))
+                             {:basic-auth       [user password]
+                              :throw-exceptions false})
+                            :body
+                            json/read-str))
+                         (:rows body))
+                        [])
           status-code (cond (contains? #{200} status)
                             :ok
                             :or
                             :error)]
       {:status  status-code
-       :data    (:rows body)
+       :data    more
        :message (condp = status-code
                   :ok
                   "reading value"
                   "error occured")}))
 
   (z/perform-update
-    [_ {:keys [record level entity]}]
+    [_ {:keys [record level entity identity]}]
     (let [{:keys [password port user uri scheme]} connection
-          result     (http/post (str scheme "://" uri ":" port "/" entity)
-                                {:body             (json/write-str record)
-                                 :headers          {:Content-Type "application/json"}
-                                 :basic-auth       [user password]
-                                 :throw-exceptions false})
+          method     (if (some? identity) http/put http/post)
+          final-uri  (if (some? identity)
+                       (str scheme "://" uri ":" port "/" entity "/" identity)
+                       (str scheme "://" uri ":" port "/" entity))
+          result     (method final-uri
+                             {:body             (json/write-str record)
+                              :headers          {:Content-Type "application/json"}
+                              :basic-auth       [user password]
+                              :throw-exceptions false})
+          _ (clojure.pprint/pprint result)
           status      (:status result)
-          _ (println "Aye Status: " status)
           body        (json/read-str (:body result)
                                      :key-fn keyword)
           status-code (cond (contains? #{201 202} status)
@@ -98,6 +115,6 @@
                   (str "Database " entity " deleted.")
                   (:reason body))})))
 
-(defn construct-connection
+(defmethod z/prepare-connection :couch
   [connection-map]
   (ZaumCouch. connection-map))
